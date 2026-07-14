@@ -16,10 +16,9 @@ private:
         }
 
         return low;
-    }
 
 public:
     int searchInsert(vector<int>& nums, int target) {
-        return binarySearch(nums, target);
+        return binarySearch(nums, target);mong
     }
 };
