@@ -1,0 +1,44 @@
+#include <vector>
+#include <stack>
+#include <algorithm>
+
+using namespace std;
+
+class Solution {
+private:
+    /**
+     * Calculates the area for the popped bar using the current index as its right boundary.
+     */
+    int calculateAreaForTop(const vector<int>& heights, stack<int>& st, int i) {
+        int height = heights[st.top()];
+        st.pop();
+        
+        // If stack is empty, it means 'height' was the smallest seen so far,
+        // so it extends all the way from index 0 to i-1.
+        int width = st.empty() ? i : (i - st.top() - 1);
+        
+        return height * width;
+    }
+
+public:
+    int largestRectangleArea(vector<int>& heights) {
+        stack<int> st; // Stores indices of heights
+        int maxArea = 0;
+        int n = heights.size();
+
+        for (int i = 0; i <= n; ++i) {
+            // Treat the end of the array (i == n) as a virtual bar of height 0 
+            // to force-flush all remaining items from the stack.
+            int currentHeight = (i == n) ? 0 : heights[i];
+
+            while (!st.empty() && heights[st.top()] > currentHeight) {
+                int area = calculateAreaForTop(heights, st, i);
+                maxArea = max(maxArea, area);
+            }
+
+            st.push(i);
+        }
+
+        return maxArea;
+    }
+};
